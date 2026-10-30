@@ -1,0 +1,9 @@
+# dev-only React copy used by test/client.mjs --render
+test/vendor/
+node_modules/
+pnpm-lock.yaml
+*.log
+*.bak
+*.tmp-*
+.DS_Store
+Thumbs.db

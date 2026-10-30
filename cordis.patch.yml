@@ -1,0 +1,45 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# dsh-rea — bundle patch
+#
+# Installing this package configures three things in one layer:
+#
+#   1. `dsh-rea`   the host half: reads D:\REA-tool\config\rea.env.json and
+#                  serves the REA settings page transport at /dsh-rea. The bare
+#                  package name is required, not cosmetic: dsh-client-modules
+#                  resolves a row to its package by exact package specifier, so a
+#                  package mounted only through a subpath would never be served as
+#                  /plugins/dsh-rea/client.js and the settings page stays empty.
+#   2. `rea-mcp`   the REA MCP server itself, launched through the
+#                  progressive-disclosure bridge shipped inside this package
+#                  (bridge/index.mjs). Harness re-sends every registered tool
+#                  schema on every request, so REA's ~230-tool catalog stays
+#                  reachable through rea_catalog / rea_call instead of being
+#                  advertised verbatim.
+#
+# The two literal paths below are machine facts, not duplicated configuration:
+# the pinned Node and the bridge are the pair the settings page also validates.
+# Everything else (engines, PATH prepends, REA_* variables, MCP advertisement
+# policy) lives in D:\REA-tool\config\rea.env.json and is injected into the REA
+# child process by the bridge.
+#
+# `failOnStartupError: false` keeps Harness startable when REA or its
+# configuration is broken: the tools are then absent and the settings page says
+# so, instead of rejecting plugin activation for the whole profile.
+#
+# Do not register a second `rea-mcp` row in $DSH_HOME/cordis.patch.yml: the home
+# layer applies last and would silently shadow this one.
+# ─────────────────────────────────────────────────────────────────────────────
+
+- insert:
+    - id: dsh-rea
+      name: 'dsh-rea'
+
+    - id: rea-mcp
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: rea
+        transport: stdio
+        command: 'D:\REA-tool\node\node.exe'
+        args:
+          - 'D:\REA-tool\plugin\dsh-rea\bridge\index.mjs'
+        failOnStartupError: false

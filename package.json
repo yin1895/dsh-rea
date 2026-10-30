@@ -1,0 +1,33 @@
+{
+  "name": "dsh-rea",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "REA（Reverse Engineer Anything）的 DSH 适配插件：内置渐进式披露 MCP 桥接、引擎体检，并提供设置面板里的 REA 配置页（引擎路径、工具披露策略、更新与目录快捷入口）。",
+  "icon": "icon.svg",
+  "keywords": ["dsh", "dsh-plugin", "deepseek-harness", "cordis", "reverse-engineering", "rea", "mcp", "settings"],
+  "exports": {
+    ".": "./lib/index.js",
+    "./core": "./lib/core.js",
+    "./client": "./lib/client.js",
+    "./bridge": "./bridge/index.mjs",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./package.json": "./package.json"
+  },
+  "files": ["lib", "bridge", "cordis.patch.yml", "icon.svg", "README.md"],
+  "scripts": {
+    "test": "node test/run.mjs"
+  },
+  "dsh": {
+    "bundle": { "patch": "./cordis.patch.yml" },
+    "client": { "platform": "web" },
+    "compatibility": { "dshReleases": { "0.2.1-rc.3": "compatible" } }
+  },
+  "peerDependencies": { "@deepseek-ai/cordis": "^4.0.1" },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-host-webserver": { "optional": true },
+    "@deepseek-ai/dsh-mcp-client": { "optional": true }
+  },
+  "engines": { "node": ">=18" },
+  "dshTarget": "0.2.1-rc.3"
+}
