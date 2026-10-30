@@ -1,5 +1,10 @@
 # dsh-rea
 
+[![checks](https://github.com/yin1895/dsh-rea/actions/workflows/checks.yml/badge.svg)](https://github.com/yin1895/dsh-rea/actions/workflows/checks.yml)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![DSH 0.2.1-rc.3](https://img.shields.io/badge/DSH-0.2.1--rc.3-blue)](docs/dsh-plugin-contract.md)
+[![REA 6.8.0](https://img.shields.io/badge/REA-6.8.0-blue)](https://github.com/morluto/rea)
+
 REA（[Reverse Engineer Anything](https://github.com/morluto/rea)）的 **DeepSeek Harness 插件**：
 安装一次，就同时得到 REA 的 MCP 服务器、渐进式披露桥接，以及设置面板里的 REA 配置页。
 REA 的全部配置集中在**一份**文件里（`<REA home>/config/rea.env.json`），不再散落到各个客户端。
