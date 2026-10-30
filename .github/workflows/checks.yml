@@ -1,8 +1,9 @@
 name: checks
 
-# The behaviour tests need a machine with a REA installation, so CI only guards the
-# packaging contract: syntax, manifest shape, and the two wiring rules that fail
-# silently at runtime (missing "./client" export, missing bare-name row).
+# The behaviour tests need a REA installation and a machine-specific config file,
+# so CI covers the packaging contract and the bridge's disclosure guarantee: it
+# installs rea-agents, then asserts the handshake works and that the full catalog
+# is not advertised.
 on:
   push:
     branches: [main]
@@ -16,7 +17,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Syntax check
         run: |
@@ -29,7 +30,10 @@ jobs:
           node --check test/client.mjs
 
       - name: Packaging contract
-        run: node scripts/check-contract.mjs
+        run: npm run check
 
-      - name: Bridge speaks JSON-RPC on stdio
-        run: node scripts/check-bridge-stdio.mjs
+      - name: Install REA
+        run: npm install --global rea-agents@latest
+
+      - name: Bridge handshake and disclosure
+        run: node scripts/check-bridge-stdio.mjs --require-rea --timeout-ms 180000
