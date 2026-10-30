@@ -67,12 +67,18 @@ docs/dsh-plugin-contract.md 本包依赖的 DSH 插件契约（都是踩坑换�
 ## 自检
 
 ```powershell
-node test/run.mjs                  # 29 项
-node test/http.mjs                 # 19 项（真实 http 服务器）
-node test/client.mjs --render      # 17 项（真实 React 渲染；需要 test/vendor 里的 react）
-node bridge/smoke.mjs              # 桥接 + 真实 REA 工具往返
+npm run check                      # 打包契约 21 项（不需要 DSH / REA）
+npm run check:bridge               # 桥接能完成 MCP initialize 握手（不需要 REA）
+npm test                           # 核心与路由 29 项（需要本机 REA 配置）
+npm run test:http                  # 真实 http 服务器 19 项
+npm run test:client                # 浏览器半侧 17 项（--render 真渲染；需 test/vendor 里的 react）
+npm run smoke                      # 桥接 + 真实 REA 工具往返
 pwsh -File scripts/rea-selftest.ps1  # 引擎端到端：10 步
 ```
+
+`npm run check` 与 `npm run check:bridge` 在 CI 上跑（`.github/workflows/checks.yml`）：它们专门盯两个
+运行时才暴露、失败时又完全无声的接线错误——缺 `exports["./client"]`、以及行没挂裸包名。
+行为测试需要本机装有 REA，留在本地跑。
 
 ## 设计约束（踩过的坑）
 

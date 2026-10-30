@@ -16,7 +16,12 @@
   },
   "files": ["lib", "bridge", "cordis.patch.yml", "icon.svg", "README.md"],
   "scripts": {
-    "test": "node test/run.mjs"
+    "test": "node test/run.mjs",
+    "test:http": "node test/http.mjs",
+    "test:client": "node test/client.mjs --render",
+    "check": "node scripts/check-contract.mjs",
+    "check:bridge": "node scripts/check-bridge-stdio.mjs",
+    "smoke": "node bridge/smoke.mjs"
   },
   "dsh": {
     "bundle": { "patch": "./cordis.patch.yml" },

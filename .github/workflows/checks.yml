@@ -1,0 +1,35 @@
+name: checks
+
+# The behaviour tests need a machine with a REA installation, so CI only guards the
+# packaging contract: syntax, manifest shape, and the two wiring rules that fail
+# silently at runtime (missing "./client" export, missing bare-name row).
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Syntax check
+        run: |
+          node --check lib/core.js
+          node --check lib/index.js
+          node --check lib/client.js
+          node --check bridge/index.mjs
+          node --check test/run.mjs
+          node --check test/http.mjs
+          node --check test/client.mjs
+
+      - name: Packaging contract
+        run: node scripts/check-contract.mjs
+
+      - name: Bridge speaks JSON-RPC on stdio
+        run: node scripts/check-bridge-stdio.mjs
